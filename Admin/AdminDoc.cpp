@@ -24,6 +24,7 @@ IMPLEMENT_DYNCREATE(CAdminDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CAdminDoc, CDocument)
 	ON_COMMAND(ID_ADMINAAPP_HOMEPAGE, &CAdminDoc::OnAdminaappHomepage)
+	ON_COMMAND(ID_APPS_ADMINAPP, &CAdminDoc::OnAppsAdminapp)
 END_MESSAGE_MAP()
 
 
@@ -140,6 +141,12 @@ void CAdminDoc::Dump(CDumpContext& dc) const
 
 
 void CAdminDoc::OnAdminaappHomepage()
+{
+
+}
+
+
+void CAdminDoc::OnAppsAdminapp()
 {
 	CHomePageDlg dlg;
 	if (dlg.DoModal() == IDOK) {

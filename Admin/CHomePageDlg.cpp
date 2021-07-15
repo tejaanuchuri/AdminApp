@@ -359,17 +359,16 @@ void CHomePageDlg::OnBnClickedButtonSwitchingOperatons()
 {
 	UpdateData(TRUE);
 	if (change_operation == L"Insert Record") {
-
-		emp_title = L"";
-		emp_age = "";
-		emp_firstname = "";
-		emp_lastname = "";
-		emp_address = "";
-		emp_jobtitle = "";
-		emp_salary = "";
-		emp_email = "";
-		emp_phonenumber = "";
-		emp_gender = "";
+		cemp_title.SetWindowText(_T(""));
+		CAge.SetWindowText(_T(""));
+		CFirstName.SetWindowText(_T(""));
+		CLastName.SetWindowText(_T(""));
+		CPhoneNumber.SetWindowText(_T(""));
+		CEmail.SetWindowText(_T(""));
+		CAddress.SetWindowText(_T(""));
+		CJobTitle.SetWindowText(_T(""));
+		CSalary.SetWindowText(_T(""));
+		CGender.SetWindowText(_T(""));
 
 		GetDlgItem(IDC_STATIC_TITLE)->ShowWindow(SW_SHOW);
 		GetDlgItem(IDC_STATIC_EMP_TITLE)->ShowWindow(SW_SHOW);
@@ -426,6 +425,7 @@ void CHomePageDlg::OnBnClickedButtonSwitchingOperatons()
 		GetDlgItem(IDC_LIST_FETCH_ALL_RECORDS)->ShowWindow(SW_HIDE);
 	}
 	else if (change_operation == L"Delete Record") {
+		CEmpNumber.SetWindowText(_T(""));
 		GetDlgItem(IDC_STATIC_DELETE_EMPLOYEE_RECORD)->ShowWindow(SW_SHOW);
 		GetDlgItem(IDC_STATIC_EMPLOYEE_NUMBER)->ShowWindow(SW_SHOW);
 		GetDlgItem(IDC_EDIT_ENTER_EMPLOYEE_NUMBER)->ShowWindow(SW_SHOW);
@@ -541,6 +541,8 @@ void CHomePageDlg::OnBnClickedButtonSwitchingOperatons()
 	else if (change_operation == L"Search Record")
 	{
 
+		CChooseField.SetWindowText(_T(""));
+		CEnterEmployeeDetails.SetWindowText(_T(""));
 		GetDlgItem(IDC_STATIC_SEARCH_EMPLOYEE_RECORD)->ShowWindow(SW_SHOW);
 		GetDlgItem(IDC_STATIC_CHOOSE_THE_FIELD)->ShowWindow(SW_SHOW);
 		GetDlgItem(IDC_COMBO_CHOOSE_FIELD_TO_SEARCH)->ShowWindow(SW_SHOW);
@@ -786,7 +788,15 @@ void CHomePageDlg::OnBnClickedButtonInsertEmployee()
 		GetDlgItem(IDC_STATIC_HIREDATE)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_MONTHCALENDAR_EMPLOYEE_HIREDATE)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_BUTTON_INSERT_EMPLOYEE)->ShowWindow(SW_HIDE);
-
+		cemp_title.SetWindowText(_T(""));
+		CAge.SetWindowText(_T(""));
+		CFirstName.SetWindowText(_T(""));
+		CLastName.SetWindowText(_T(""));
+		CPhoneNumber.SetWindowText(_T(""));
+		CEmail.SetWindowText(_T(""));
+		CAddress.SetWindowText(_T(""));
+		CJobTitle.SetWindowText(_T(""));
+		CSalary.SetWindowText(_T(""));
 		GetDlgItem(IDC_LIST_FETCH_ALL_RECORDS)->ShowWindow(SW_SHOW);
 
 		UpdateWindow();
@@ -827,7 +837,7 @@ void CHomePageDlg::OnBnClickedButtonDeleteEmployeeRecord()
 	GetDlgItem(IDC_STATIC_EMPLOYEE_NUMBER)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_EDIT_ENTER_EMPLOYEE_NUMBER)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_BUTTON_DELETE_EMPLOYEE_RECORD)->ShowWindow(SW_HIDE);
-
+	CEmpNumber.SetWindowText(_T(""));
 	GetDlgItem(IDC_LIST_FETCH_ALL_RECORDS)->ShowWindow(SW_SHOW);
 	UpdateWindow();
 }
@@ -899,8 +909,9 @@ void CHomePageDlg::OnBnClickedButtonSearchEmployeeRecord()
 	m_Search_list.InsertColumn(10, L"JobTitle", LVCFMT_LEFT, 100);
 	m_Search_list.InsertColumn(11, L"Salary", LVCFMT_CENTER, 80);
 	m_Search_list.InsertColumn(12, L"HireDate", LVCFMT_LEFT, 100);
-
+	int count = 0;
 	while (!recset.IsEOF()) {
+		count++;
 		// Copy each column into a variable
 		recset.GetFieldValue(L"EmpID", e_id);
 		recset.GetFieldValue(L"Title",e_title);
@@ -934,7 +945,9 @@ void CHomePageDlg::OnBnClickedButtonSearchEmployeeRecord()
 		// goto next record
 		recset.MoveNext();
 	}
-	MessageBox(L"Record Found sucessfully...!");
+	if (count == 0) {
+		AfxMessageBox(L"Record Not Found...!");
+	}
 	// Close the database
 	database.Close();
 	}CATCH(CDBException, e) {
@@ -942,8 +955,8 @@ void CHomePageDlg::OnBnClickedButtonSearchEmployeeRecord()
 		AfxMessageBox(L"Database error: " + e->m_strError);
 	}
 	END_CATCH;
-	ChooseField.Empty();
-	CEmpSearchDetails.Empty();
+	CChooseField.SetWindowText(_T(""));
+	CEnterEmployeeDetails.SetWindowText(_T(""));
 	UpdateWindow();
 }
 void CHomePageDlg::ResetListControl() {
@@ -1022,11 +1035,9 @@ void CHomePageDlg::OnBnClickedButtonUpdateEmployeeRecord()
 	GetDlgItem(IDC_MONTHCALENDAR_UPDATE_DATE)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_BUTTON_UPDATE_EMPLOYEE_RECORD)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_BUTTON_SET_THE_COLUMN)->ShowWindow(SW_HIDE);
-	EmpID.Empty();
-	ChooseField.Empty();
-	EnterValue.Empty();
-	UpdateDate.null;
-
+	CChooseField.SetWindowText(_T(""));
+	CUpdateField.SetWindowText(_T(""));
+	CSEnterEmpNumber.SetWindowText(_T(""));
 	GetDlgItem(IDC_LIST_FETCH_ALL_RECORDS)->ShowWindow(SW_SHOW);
 	UpdateWindow();
 }

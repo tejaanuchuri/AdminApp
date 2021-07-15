@@ -47,4 +47,5 @@ protected:
 #endif // SHARED_HANDLERS
 public:
 	afx_msg void OnAdminaappHomepage();
+	afx_msg void OnAppsAdminapp();
 };

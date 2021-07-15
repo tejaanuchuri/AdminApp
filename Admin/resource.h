@@ -72,13 +72,15 @@
 #define IDC_BUTTON_SET_THE_COLUMN       1062
 #define IDC_LIST_SEARCH_LIST            1063
 #define ID_ADMINAAPP_HOMEPAGE           32771
+#define ID_ADMINAPP_HOME                32772
+#define ID_APPS_ADMINAPP                32773
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        313
-#define _APS_NEXT_COMMAND_VALUE         32772
+#define _APS_NEXT_COMMAND_VALUE         32774
 #define _APS_NEXT_CONTROL_VALUE         1064
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
