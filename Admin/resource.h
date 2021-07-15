@@ -68,7 +68,9 @@
 #define IDC_MONTHCALENDAR_EMPLOYEE_HIREDATE 1058
 #define IDC_MONTHCALENDAR_UPDATE_DATE   1059
 #define IDC_LIST1                       1060
-#define IDC_LIST_SEARCH_LIST            1062
+#define IDC_BUTTON1                     1061
+#define IDC_BUTTON_SET_THE_COLUMN       1062
+#define IDC_LIST_SEARCH_LIST            1063
 #define ID_ADMINAAPP_HOMEPAGE           32771
 
 // Next default values for new objects
@@ -77,7 +79,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        313
 #define _APS_NEXT_COMMAND_VALUE         32772
-#define _APS_NEXT_CONTROL_VALUE         1061
+#define _APS_NEXT_CONTROL_VALUE         1064
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif

@@ -102,4 +102,10 @@ public:
 	CMonthCalCtrl CUpdateDate;
 	COleDateTime UpdateDate;
 	CListCtrl m_Search_list;
+	afx_msg void OnCbnDropdownComboChooseField();
+	afx_msg void OnCbnEditupdateComboChooseField();
+	afx_msg void OnCbnEditchangeComboChooseField();
+	afx_msg void OnStnClickedStaticUpdateFiled();
+	afx_msg void OnBnClickedButtonSetTheColumn();
+	afx_msg void OnLvnItemchangedListFetchAllRecords(NMHDR* pNMHDR, LRESULT* pResult);
 };

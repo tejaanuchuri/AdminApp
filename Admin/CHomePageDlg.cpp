@@ -127,6 +127,12 @@ BEGIN_MESSAGE_MAP(CHomePageDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_SEARCH_EMPLOYEE_RECORD, &CHomePageDlg::OnBnClickedButtonSearchEmployeeRecord)
 	ON_BN_CLICKED(IDC_BUTTON_UPDATE_EMPLOYEE_RECORD, &CHomePageDlg::OnBnClickedButtonUpdateEmployeeRecord)
 	ON_CBN_SELCHANGE(IDC_COMBO_CHOOSE_FIELD, &CHomePageDlg::OnCbnSelchangeComboChooseField)
+	ON_CBN_DROPDOWN(IDC_COMBO_CHOOSE_FIELD, &CHomePageDlg::OnCbnDropdownComboChooseField)
+	ON_CBN_EDITUPDATE(IDC_COMBO_CHOOSE_FIELD, &CHomePageDlg::OnCbnEditupdateComboChooseField)
+	ON_CBN_EDITCHANGE(IDC_COMBO_CHOOSE_FIELD, &CHomePageDlg::OnCbnEditchangeComboChooseField)
+	ON_STN_CLICKED(IDC_STATIC_UPDATE_FILED, &CHomePageDlg::OnStnClickedStaticUpdateFiled)
+	ON_BN_CLICKED(IDC_BUTTON_SET_THE_COLUMN, &CHomePageDlg::OnBnClickedButtonSetTheColumn)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_FETCH_ALL_RECORDS, &CHomePageDlg::OnLvnItemchangedListFetchAllRecords)
 END_MESSAGE_MAP()
 
 
@@ -369,8 +375,8 @@ void CHomePageDlg::OnBnClickedButtonSwitchingOperatons()
 		GetDlgItem(IDC_STATIC_CHOOSE_FILED)->ShowWindow(SW_SHOW);
 		GetDlgItem(IDC_COMBO_CHOOSE_FIELD)->ShowWindow(SW_SHOW);
 		GetDlgItem(IDC_STATIC_UPDATE_FILED)->ShowWindow(SW_SHOW);
-		GetDlgItem(IDC_EDIT_UPDATE_FIELD)->ShowWindow(SW_SHOW);
-		GetDlgItem(IDC_MONTHCALENDAR_UPDATE_DATE)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_EDIT_UPDATE_FIELD)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_MONTHCALENDAR_UPDATE_DATE)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_BUTTON_UPDATE_EMPLOYEE_RECORD)->ShowWindow(SW_SHOW);
 
 		GetDlgItem(IDC_STATIC_SEARCH_EMPLOYEE_RECORD)->ShowWindow(SW_HIDE);
@@ -521,6 +527,105 @@ void CHomePageDlg::OnBnClickedButtonSwitchingOperatons()
 		GetDlgItem(IDC_STATIC_ENTER_EMP_DETAILS)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_EDIT_ENTER_SEARCH_VALUe)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_BUTTON_SEARCH_EMPLOYEE_RECORD)->ShowWindow(SW_HIDE);
+
+
+		UpdateData(FALSE); // flow direction database -> ui
+
+		CString e_id;
+		CString e_age;
+		CString e_title;
+		CString e_firstname;
+		CString e_lastname;
+		CString e_gender;
+		CString e_phonenumber;
+		CString e_email;
+		CString e_birthdate;
+		CString e_address;
+		CString e_jobtitle;
+		CString e_salary;
+		CString e_hiredate;
+
+		CDatabase database;
+		CString sDsn;
+		CString SqlString;
+		int iRec = 0;
+		// Build ODBC connection string
+		//sDsn.Format(_T("Driver={ODBC Driver 17 for SQL Server};Server=FYYP1N2;Dbq=C:\\Program Files\\Microsoft SQL Server\\MSSQL15.MSSQLSERVER\\MSSQL\\DATA\\AdminApp.mdf;Trusted_Connection=yes"));
+
+		sDsn.Format(_T("Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=C:\\Users\\admin.teja\\Documents\\EmployeeDatabase.accdb;Uid=Admin;Pwd=;"));
+		TRY{
+			// Open the database
+			CRecordset recset(&database);
+			database.Open(NULL,false,false,sDsn);
+		SqlString = L"SELECT * FROM EmployeeTable";
+
+		AfxMessageBox(SqlString);
+		//database.ExecuteSQL(SqlString);
+
+		recset.Open(CRecordset::forwardOnly, SqlString, CRecordset::readOnly);
+		ResetListControl();
+		ListView_SetExtendedListViewStyle(emp_list, LVS_EX_GRIDLINES);
+		emp_list.InsertColumn(
+			0,              // Rank/order of item
+			L"EmpID",          // Caption for this header
+			LVCFMT_LEFT,    // Relative position of items under header
+			100);           // Width of items under header
+
+		emp_list.InsertColumn(1, L"Title", LVCFMT_CENTER, 80);
+		emp_list.InsertColumn(2, L"Age", LVCFMT_LEFT, 100);
+		emp_list.InsertColumn(3, L"FirstName", LVCFMT_CENTER, 80);
+		emp_list.InsertColumn(4, L"LastName", LVCFMT_LEFT, 100);
+		emp_list.InsertColumn(5, L"Gender", LVCFMT_CENTER, 80);
+		emp_list.InsertColumn(6, L"MobilePhone", LVCFMT_LEFT, 100);
+		emp_list.InsertColumn(7, L"EMail", LVCFMT_CENTER, 80);
+		emp_list.InsertColumn(8, L"BirthDate", LVCFMT_LEFT, 100);
+		emp_list.InsertColumn(9, L"Address", LVCFMT_CENTER, 80);
+		emp_list.InsertColumn(10, L"JobTitle", LVCFMT_LEFT, 100);
+		emp_list.InsertColumn(11, L"Salary", LVCFMT_CENTER, 80);
+		emp_list.InsertColumn(12, L"HireDate", LVCFMT_LEFT, 100);
+
+		while (!recset.IsEOF()) {
+			// Copy each column into a variable
+			recset.GetFieldValue(L"EmpID", e_id);
+			recset.GetFieldValue(L"Title",e_title);
+			recset.GetFieldValue(L"Age", e_age);
+			recset.GetFieldValue(L"FirstName", e_firstname);
+			recset.GetFieldValue(L"LastName", e_lastname);
+			recset.GetFieldValue(L"Gender", e_gender);
+			recset.GetFieldValue(L"MobilePhone", e_phonenumber);
+			recset.GetFieldValue(L"EMail", e_email);
+			recset.GetFieldValue(L"BirthDate", e_birthdate);
+			recset.GetFieldValue(L"Address", e_address);
+			recset.GetFieldValue(L"JobTitle", e_jobtitle);
+			recset.GetFieldValue(L"Salary", e_salary);
+			recset.GetFieldValue(L"Hiredate", e_hiredate);
+
+			// Insert values into the list control
+			iRec = emp_list.InsertItem(0, e_id, 0);
+			emp_list.SetItemText(0, 1, e_title);
+			emp_list.SetItemText(0, 2, e_age);
+			emp_list.SetItemText(0, 3, e_firstname);
+			emp_list.SetItemText(0, 4, e_lastname);
+			emp_list.SetItemText(0, 5, e_gender);
+			emp_list.SetItemText(0, 6, e_phonenumber);
+			emp_list.SetItemText(0, 7, e_email);
+			emp_list.SetItemText(0, 8, e_birthdate);
+			emp_list.SetItemText(0, 9, e_address);
+			emp_list.SetItemText(0, 10, e_jobtitle);
+			emp_list.SetItemText(0, 11, e_salary);
+			emp_list.SetItemText(0, 12, e_hiredate);
+
+			// goto next record
+			recset.MoveNext();
+		}
+		MessageBox(L"Record Loaded sucessfully...!");
+		// Close the database
+		database.Close();
+		}CATCH(CDBException, e) {
+			// If a database exception occured, show error msg
+			AfxMessageBox(L"Database error: " + e->m_strError);
+		}
+		END_CATCH;
 
 	}
 	else {
@@ -692,6 +797,8 @@ void CHomePageDlg::OnBnClickedButtonSearchEmployeeRecord()
 	CString SqlString;
 	int iRec = 0;
 	// Build ODBC connection string
+	//sDsn.Format(_T("Driver={ODBC Driver 17 for SQL Server};Server=FYYP1N2;Dbq=C:\\Program Files\\Microsoft SQL Server\\MSSQL15.MSSQLSERVER\\MSSQL\\DATA\\AdminApp.mdf;Trusted_Connection=yes"));
+
 	sDsn.Format(_T("Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=C:\\Users\\admin.teja\\Documents\\EmployeeDatabase.accdb;Uid=Admin;Pwd=;"));
 	TRY{
 		// Open the database
@@ -700,9 +807,12 @@ void CHomePageDlg::OnBnClickedButtonSearchEmployeeRecord()
 	SqlString = L"SELECT * FROM EmployeeTable WHERE ";
 	SqlString.Append(ChooseField);
 	SqlString.Append(_T(" = "));
-
-	SqlString.Append(EnterValue);
-
+	if (ChooseField == L"EmpID") {
+		SqlString.Append(EnterValue);
+	}
+	else {
+		SqlString.Append(_T("'" + EnterValue + "'"));
+	}
 	AfxMessageBox(SqlString);
 	//database.ExecuteSQL(SqlString);
 
@@ -784,10 +894,14 @@ void CHomePageDlg::ResetListControl() {
 }
 void CHomePageDlg::OnBnClickedButtonUpdateEmployeeRecord()
 {
-	/*UpdateData(TRUE); // flow direction database <- ui
-	//if (dlg.DoModal() == IDD_DIALOG_INSERT) {
-	CString ChooseField = CChooseFieldSearch;
-	CString EnterValue = CEmpSearchDetails;
+	UpdateData(TRUE); // flow direction database <- ui
+
+	CString EmpID = uemp_no;
+	CString ChooseField = UChooseField;
+	CString EnterValue = Update_Field_Value;
+	COleDateTime DT(UpdateDate);
+	CString date_value;
+	date_value.Append(DT.Format(_T("%Y-%m-%d")));
 
 	CDatabase database;
 	CString sDsn;
@@ -797,24 +911,36 @@ void CHomePageDlg::OnBnClickedButtonUpdateEmployeeRecord()
 	TRY{
 		// Open the database
 		database.Open(NULL,false,false,sDsn);
-	SqlString = L"UPDATE EmployeeTable";
+	SqlString = L"UPDATE EmployeeTable SET ";
+	SqlString.Append(ChooseField);
+	SqlString.Append(_T(" = "));
+	if (ChooseField == L"Hiredate" || ChooseField == L"BirthDate") {
+		SqlString.Append(_T("'" + date_value + "'"));
+	}
+	else {
+
+		SqlString.Append(_T("'" + EnterValue + "'"));
+	}
+	SqlString.Append(_T(" WHERE EmpId =" + EmpID));
 
 	AfxMessageBox(SqlString);
 	//database.ExecuteSQL(SqlString);
+	database.ExecuteSQL(SqlString);
 
-	MessageBox(L"Record Found sucessfully...!");
+	MessageBox(L"Record Update sucessfully...!");
 	// Close the database
 	database.Close();
 	}CATCH(CDBException, e) {
 		// If a database exception occured, show error msg
 		AfxMessageBox(L"Database error: " + e->m_strError);
 	}
-	END_CATCH;*/
+	END_CATCH;
 }
 
 
 void CHomePageDlg::OnCbnSelchangeComboChooseField()
 {
+
 }
 
 /*
@@ -883,3 +1009,53 @@ void CDisplayEmpRecords::ResetListControl() {
 		m_list.DeleteColumn(i);
 	}
 }*/
+
+void CHomePageDlg::OnCbnDropdownComboChooseField()
+{
+	//GetDlgItem(IDC_MONTHCALENDAR_UPDATE_DATE)->ShowWindow(SW_HIDE);
+	//GetDlgItem(IDC_EDIT_UPDATE_FIELD)->ShowWindow(SW_HIDE);
+
+}
+
+
+void CHomePageDlg::OnCbnEditupdateComboChooseField()
+{
+
+}
+
+
+void CHomePageDlg::OnCbnEditchangeComboChooseField()
+{
+
+}
+
+
+void CHomePageDlg::OnStnClickedStaticUpdateFiled()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+void CHomePageDlg::OnBnClickedButtonSetTheColumn()
+{
+	UpdateData(TRUE);
+	GetDlgItem(IDC_EDIT_UPDATE_FIELD)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_MONTHCALENDAR_UPDATE_DATE)->ShowWindow(SW_HIDE);
+	if (UChooseField == L"BirthDate" || UChooseField == L"Hiredate") {
+		GetDlgItem(IDC_EDIT_UPDATE_FIELD)->ShowWindow(SW_HIDE);
+		GetDlgItem(IDC_MONTHCALENDAR_UPDATE_DATE)->ShowWindow(SW_SHOW);
+	}
+	else {
+		GetDlgItem(IDC_EDIT_UPDATE_FIELD)->ShowWindow(SW_SHOW);
+		GetDlgItem(IDC_MONTHCALENDAR_UPDATE_DATE)->ShowWindow(SW_HIDE);
+	}
+	UpdateWindow();
+}
+
+
+void CHomePageDlg::OnLvnItemchangedListFetchAllRecords(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+}
