@@ -19,6 +19,8 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	void ResetListControl();
+	void m_ResetListControl();
+	void emp_data_load();
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -38,7 +40,6 @@ public:
 	CComboBox cemp_title;
 	CStatic c_title;
 	CString uemp_no;
-	afx_msg void OnStnClickedStaticEnterEmpDetails();
 	CString change_operation;
 	afx_msg void OnBnClickedButtonSwitchingOperatons();
 	CStatic cinsert_title;
@@ -78,7 +79,6 @@ public:
 	CStatic CSEnterEmployeeNumber;
 	CString DEmployeeNumber;
 	CButton CBDelete;
-	afx_msg void OnStnClickedStaticSearchEmployeeRecord();
 	CEdit CSEnterEmpNumber;
 	CStatic CSSearchEmpRecord;
 	CStatic CSChooseFieldSearch;
@@ -107,5 +107,5 @@ public:
 	afx_msg void OnCbnEditchangeComboChooseField();
 	afx_msg void OnStnClickedStaticUpdateFiled();
 	afx_msg void OnBnClickedButtonSetTheColumn();
-	afx_msg void OnLvnItemchangedListFetchAllRecords(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnStnClickedStaticEnterEmpDetails();
 };
